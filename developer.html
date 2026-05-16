@@ -96,7 +96,7 @@
                 <h2><i class="fas fa-code"></i> API Endpoint Configuration</h2>
                 <div class="api-box">
                     <strong>🔗 Validasi Bot:</strong><br>
-                    <code id="apiUrl">https://epin-database.vercel.app/api/validate</code>
+                    <code id="apiUrl">https://database-ikhwanul.vercel.app/api/validate</code>
                 </div>
                 <button class="btn-small" onclick="copyToClipboard('apiUrl')"><i class="fas fa-copy"></i> Copy Endpoint</button>
                 <div class="api-box" style="margin-top:15px;">
@@ -106,7 +106,7 @@
                 <div class="pre-box">
                     <pre style="color:#fff;">
 // Contoh penggunaan di bot:
-const { data } = await axios.get(`https://epin-database.vercel.app/api/validate?number=${userNumber}`);
+const { data } = await axios.get(`https://database-ikhwanul.vercel.app/api/validate?number=${userNumber}`);
 if (data.data.isValid) {
     console.log('✅ Akses diterima');
 } else {
