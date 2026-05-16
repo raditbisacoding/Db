@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Phone Manager Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="glass sidebar">
+    <h2>✨ Manager Pro</h2>
+    <button onclick="showTab('dashboard')">📊 Dashboard</button>
+    <button onclick="showTab('numbers')">📱 Numbers</button>
+    <button onclick="showTab('admins')">👤 Admins</button>
+    <button onclick="showTab('logs')">📝 Logs</button>
+    <button onclick="toggleTheme()">🌙 Theme</button>
+    <button onclick="exportData()">📤 Export</button>
+    <button onclick="logout()">🚪 Logout</button>
+  </aside>
+  <main class="content">
+    <section id="dashboardTab" class="tab">
+      <h1>Dashboard</h1>
+      <div class="stats">
+        <div class="glass stat"><h2 id="statTotal">0</h2><p>Total Number</p></div>
+        <div class="glass stat"><h2 id="statActive">0</h2><p>Active</p></div>
+        <div class="glass stat"><h2 id="statBlacklist">0</h2><p>Blacklist</p></div>
+      </div>
+    </section>
+
+    <section id="numbersTab" class="tab hidden">
+      <h1>Numbers</h1>
+      <div class="row one-two">
+        <input id="phoneInput" placeholder="Enter phone number">
+        <button onclick="addNumber()">➕ Add</button>
+      </div>
+      <input id="searchInput" placeholder="🔍 Search..." oninput="render()">
+      <div class="glass table-wrap">
+        <table>
+          <thead><tr><th>Phone</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="numbersBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="adminsTab" class="tab hidden">
+      <h1>Admins</h1>
+      <div class="row three">
+        <input id="newAdminUser" placeholder="Username">
+        <input id="newAdminPass" placeholder="Password">
+        <button onclick="addAdmin()">Add Admin</button>
+      </div>
+      <div class="glass table-wrap">
+        <table><tbody id="adminsBody"></tbody></table>
+      </div>
+    </section>
+
+    <section id="logsTab" class="tab hidden">
+      <h1>Activity Logs</h1>
+      <ul id="logsList" class="glass logs"></ul>
+    </section>
+  </main>
+</div>
+<script src="app.js"></script>
+</body></html>
