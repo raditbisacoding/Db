@@ -64,7 +64,7 @@
     </div>
     <script src="auth.js"></script>
     <script>
-        const FIREBASE_URL = 'https://epin-3b848-default-rtdb.asia-southeast1.firebasedatabase.app/';
+        const FIREBASE_URL = 'https://database-858e5-default-rtdb.asia-southeast1.firebasedatabase.app/';
         if (!validatePageAccess('reseller')) window.location.href = 'index.html';
         
         function toggleOldPassword() { const pwd = document.getElementById('oldPassword'); const icon = document.getElementById('oldToggleIcon'); if (pwd.type === 'password') { pwd.type = 'text'; icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); } else { pwd.type = 'password'; icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); } }
