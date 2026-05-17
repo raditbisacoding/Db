@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>EpinStoreOffc - Super Reseller Dashboard</title>
+    <title>IkhwanulStore - Super Reseller Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -14,7 +14,7 @@
         <div class="sidebar-header">
             <i class="fas fa-star"></i>
             <h3>Super Reseller Epin</h3>
-            <p>epin store | <i class="fab fa-telegram"></i> @epineek</p>
+            <p>ikhwanul store | <i class="fab fa-telegram"></i> @raditikhwanul</p>
         </div>
         <div class="sidebar-menu">
             <a href="#" class="active" onclick="showPage('dashboard'); return false;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
@@ -65,7 +65,7 @@
     </div>
     <script src="auth.js"></script>
     <script>
-        const FIREBASE_URL = 'https://epin-3b848-default-rtdb.asia-southeast1.firebasedatabase.app/';
+        const FIREBASE_URL = 'https://database-858e5-default-rtdb.asia-southeast1.firebasedatabase.app/';
         if (!validatePageAccess('super_reseller')) window.location.href = 'index.html';
         
         function toggleOldPassword() { const pwd = document.getElementById('oldPassword'); const icon = document.getElementById('oldToggleIcon'); if (pwd.type === 'password') { pwd.type = 'text'; icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); } else { pwd.type = 'password'; icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); } }
@@ -128,7 +128,7 @@
             const session = JSON.parse(localStorage.getItem('epin_session'));
             const role = session.role;
             try {
-                const response = await fetch('https://epin-database.vercel.app/api/change-password', {
+                const response = await fetch('https://database.ikhwanul.vercel.app/api/change-password', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ role, oldPassword, newPassword })
                 });
