@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
     
     try {
-        const response = await fetch('https://epin-3b848-default-rtdb.asia-southeast1.firebasedatabase.app/epin_active_numbers.json');
+        const response = await fetch('https://database-858e5-default-rtdb.asia-southeast1.firebasedatabase.app/epin_active_numbers.json');
         const data = await response.json();
         const numbers = Array.isArray(data) ? data : [];
         
