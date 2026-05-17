@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>EpinStoreOffc - Reseller Dashboard</title>
+    <title>IkhwanulStore - Reseller Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -13,8 +13,8 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <i class="fas fa-store"></i>
-            <h3>Reseller Epin</h3>
-            <p>epin store | <i class="fab fa-telegram"></i> @epineek</p>
+            <h3>Reseller Ikhwanul</h3>
+            <p>Ikhwanul store | <i class="fab fa-telegram"></i> @raditikhwanul</p>
         </div>
         <div class="sidebar-menu">
             <a href="#" class="active" onclick="showPage('dashboard'); return false;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
@@ -27,7 +27,7 @@
     <div class="container">
         <div class="navbar">
             <div><button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button></div>
-            <div class="logo"><h2>EPINSTORE<span>OFFC</span></h2><span>Reseller Dashboard</span></div>
+            <div class="logo"><h2>IKHWANULSTORE<span>OFFC</span></h2><span>Reseller Dashboard</span></div>
             <div class="user-info"></div>
         </div>
         <div id="dashboardPage" class="page-content">
@@ -112,7 +112,7 @@
             const session = JSON.parse(localStorage.getItem('epin_session'));
             const role = session.role;
             try {
-                const response = await fetch('https://epin-database.vercel.app/api/change-password', {
+                const response = await fetch('https://database-ikhwanul.vercel.app/api/change-password', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ role, oldPassword, newPassword })
                 });
