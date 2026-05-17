@@ -1,4 +1,4 @@
-const FIREBASE_URL = 'https://epin-3b848-default-rtdb.asia-southeast1.firebasedatabase.app/';
+const FIREBASE_URL = 'https://database-858e5-default-rtdb.asia-southeast1.firebasedatabase.app/';
 
 const DB_ACTIVE = `${FIREBASE_URL}epin_active_numbers.json`;
 const DB_BLOCKED = `${FIREBASE_URL}epin_blocked_numbers.json`;
@@ -16,10 +16,10 @@ const ROLE_LEVEL = {
 
 // Password default
 const DEFAULT_PASSWORDS = {
-    'developer': 'epindev2024',
-    'owner': 'epinyaya',
-    'super_reseller': 'epinsuper',
-    'reseller': 'epinreseller'
+    'developer': 'radit123',
+    'owner': 'ikhwanul',
+    'super_reseller': 'wawakinul',
+    'reseller': 'ikhwanulreseller'
 };
 
 async function fetchFromFirebase(url, options = {}) {
