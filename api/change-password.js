@@ -1,12 +1,12 @@
 // api/change-password.js - Endpoint untuk ganti password role
-const FIREBASE_URL = 'https://epin-3b848-default-rtdb.asia-southeast1.firebasedatabase.app/';
+const FIREBASE_URL = 'https://database-858e5-default-rtdb.asia-southeast1.firebasedatabase.app/';
 
 // Password default
 const DEFAULT_PASSWORDS = {
-    'developer': 'epindev2024',
-    'owner': 'epinyaya',
-    'super_reseller': 'epinsuper',
-    'reseller': 'epinreseller'
+    'developer': 'radit123',
+    'owner': 'ikhwanul',
+    'super_reseller': 'wawakinul',
+    'reseller': 'ikhwanulreseller'
 };
 
 export default async function handler(req, res) {
