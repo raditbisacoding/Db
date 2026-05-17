@@ -24,12 +24,12 @@ export default async function handler(req, res) {
     if (!formattedNumber.startsWith('62')) formattedNumber = '62' + formattedNumber;
     
     try {
-        const response = await fetch('https://epin-3b848-default-rtdb.asia-southeast1.firebasedatabase.app/epin_active_numbers.json');
+        const response = await fetch(https://database-858e5-default-rtdb.asia-southeast1.firebasedatabase.app/epin_active_numbers.json');
         const activeNumbers = await response.json();
         const numbers = Array.isArray(activeNumbers) ? activeNumbers : [];
         const isValid = numbers.includes(formattedNumber);
         
-        const blockedResponse = await fetch('https://epin-3b848-default-rtdb.asia-southeast1.firebasedatabase.app/epin_blocked_numbers.json');
+        const blockedResponse = await fetch('https://database-858e5-default-rtdb.asia-southeast1.firebasedatabase.app/epin_blocked_numbers.json');
         const blockedNumbers = await blockedResponse.json();
         const blocked = Array.isArray(blockedNumbers) ? blockedNumbers : [];
         const isBlocked = blocked.includes(formattedNumber);
