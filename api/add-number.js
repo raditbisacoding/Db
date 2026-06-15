@@ -1,40 +1,76 @@
-// 📁 Lokasi file: /api/add-number.js
-// Tujuan: Endpoint untuk menambah nomor WhatsApp ke daftar akses
+// 📁 Lokasi: /api/add-number.js
+import admin from 'firebase-admin';
+
+// Cegah multiple initialization di Vercel
+if (!admin.apps.length) {
+  // Gunakan variabel lingkungan untuk keamanan
+  const serviceAccount = {
+    type: process.env.FIREBASE_TYPE,
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
+  };
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: process.env.FIREBASE_DATABASE_URL
+  });
+}
+
+const db = admin.database();
 
 export default async function handler(req, res) {
-    // 1. Hanya izinkan metode POST (untuk keamanan)
-    if (req.method !== 'POST') {
-        return res.status(405).json({ status: 'error', message: 'Method tidak diizinkan. Gunakan POST.' });
+  // Hanya izinkan metode POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ status: 'error', message: 'Method tidak diizinkan' });
+  }
+
+  const { nomor, password } = req.body;
+  const validPassword = 'radit123'; // Ganti dengan password Anda
+
+  // Validasi password
+  if (password !== validPassword) {
+    return res.status(401).json({ status: 'error', message: 'Password salah!' });
+  }
+
+  // Validasi nomor
+  if (!nomor || nomor.length < 10 || isNaN(nomor)) {
+    return res.status(400).json({ status: 'error', message: 'Nomor tidak valid!' });
+  }
+
+  try {
+    const ref = db.ref(`akses/${nomor}`);
+    const snapshot = await ref.get();
+
+    if (snapshot.exists()) {
+      return res.status(409).json({ status: 'error', message: 'Nomor sudah terdaftar!' });
     }
 
-    // 2. Ambil data nomor dari body request
-    const { nomor, password } = req.body;
+    // Simpan ke Firebase dengan struktur data
+    await ref.set({
+      nomor: nomor,
+      addedAt: Date.now(),
+      addedBy: 'bot',
+      status: 'active'
+    });
 
-    // 3. Validasi password sederhana (ubah sesuai keinginan Anda)
-    const validPassword = 'radit123'; // Ganti dengan password rahasia Anda
-    if (password !== validPassword) {
-        return res.status(401).json({ status: 'error', message: 'Password salah! Akses ditolak.' });
-    }
-
-    // 4. Validasi nomor
-    if (!nomor || nomor.length < 10) {
-        return res.status(400).json({ status: 'error', message: 'Nomor tidak valid.' });
-    }
-
-    // 5. Simpan nomor ke database (contoh sederhana dengan array global)
-    // ⚠️ PERINGATAN: Contoh ini hanya untuk ilustrasi.
-    // Data akan hilang setiap server restart. Anda HARUS menggunakan database nyata.
-    if (!global.aksesList) {
-        global.aksesList = [];
-    }
-    if (global.aksesList.includes(nomor)) {
-        return res.status(409).json({ status: 'error', message: 'Nomor sudah ada dalam daftar akses.' });
-    }
-
-    global.aksesList.push(nomor);
-    console.log('✅ Nomor ditambahkan:', nomor);
-
-    // 6. Kirim respons sukses
+    console.log(`✅ Nomor ${nomor} berhasil ditambahkan.`);
+    res.status(200).json({
+      status: 'success',
+      message: 'Nomor berhasil ditambahkan ke daftar akses.',
+      data: { nomor }
+    });
+  } catch (error) {
+    console.error('Error Firebase:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+}    // 6. Kirim respons sukses
     res.status(200).json({
         status: 'success',
         message: 'Nomor berhasil ditambahkan ke daftar akses.',
