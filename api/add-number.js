@@ -1,79 +1,55 @@
 // 📁 Lokasi: /api/add-number.js
-import admin from 'firebase-admin';
-
-// Cegah multiple initialization di Vercel
-if (!admin.apps.length) {
-  // Gunakan variabel lingkungan untuk keamanan
-  const serviceAccount = {
-    type: process.env.FIREBASE_TYPE,
-    project_id: process.env.FIREBASE_PROJECT_ID,
-    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-    private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    client_email: process.env.FIREBASE_CLIENT_EMAIL,
-    client_id: process.env.FIREBASE_CLIENT_ID,
-    auth_uri: process.env.FIREBASE_AUTH_URI,
-    token_uri: process.env.FIREBASE_TOKEN_URI,
-    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_CERT_URL,
-    client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
-  };
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: process.env.FIREBASE_DATABASE_URL
-  });
-}
-
-const db = admin.database();
+const FIREBASE_URL = 'https://database-858e5-default-rtdb.asia-southeast1.firebasedatabase.app/';
+const API_KEY = 'radit123'; // Ganti dengan password/kunci Anda sendiri
 
 export default async function handler(req, res) {
-  // Hanya izinkan metode POST
-  if (req.method !== 'POST') {
-    return res.status(405).json({ status: 'error', message: 'Method tidak diizinkan' });
-  }
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const { nomor, password } = req.body;
-  const validPassword = 'radit123'; // Ganti dengan password Anda
-
-  // Validasi password
-  if (password !== validPassword) {
-    return res.status(401).json({ status: 'error', message: 'Password salah!' });
-  }
-
-  // Validasi nomor
-  if (!nomor || nomor.length < 10 || isNaN(nomor)) {
-    return res.status(400).json({ status: 'error', message: 'Nomor tidak valid!' });
-  }
-
-  try {
-    const ref = db.ref(`akses/${nomor}`);
-    const snapshot = await ref.get();
-
-    if (snapshot.exists()) {
-      return res.status(409).json({ status: 'error', message: 'Nomor sudah terdaftar!' });
+    if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'POST') {
+        return res.status(405).json({ status: 'error', message: 'Method tidak diizinkan' });
     }
 
-    // Simpan ke Firebase dengan struktur data
-    await ref.set({
-      nomor: nomor,
-      addedAt: Date.now(),
-      addedBy: 'bot',
-      status: 'active'
-    });
+    const { nomor, password } = req.body || {};
 
-    console.log(`✅ Nomor ${nomor} berhasil ditambahkan.`);
-    res.status(200).json({
-      status: 'success',
-      message: 'Nomor berhasil ditambahkan ke daftar akses.',
-      data: { nomor }
-    });
-  } catch (error) {
-    console.error('Error Firebase:', error);
-    res.status(500).json({ status: 'error', message: 'Internal server error' });
-  }
-}    // 6. Kirim respons sukses
-    res.status(200).json({
-        status: 'success',
-        message: 'Nomor berhasil ditambahkan ke daftar akses.',
-        data: { nomor: nomor }
-    });
+    if (password !== API_KEY) {
+        return res.status(401).json({ status: 'error', message: 'Password salah!' });
+    }
+
+    let formattedNumber = (nomor || '').toString().replace(/[^0-9]/g, '');
+    if (formattedNumber && !formattedNumber.startsWith('62')) formattedNumber = '62' + formattedNumber;
+
+    if (!formattedNumber || formattedNumber.length < 10) {
+        return res.status(400).json({ status: 'error', message: 'Nomor tidak valid!' });
+    }
+
+    try {
+        const listUrl = `${FIREBASE_URL}epin_active_numbers.json`;
+        const current = await (await fetch(listUrl)).json();
+        const numbers = Array.isArray(current) ? current : [];
+
+        if (numbers.includes(formattedNumber)) {
+            return res.status(409).json({ status: 'error', message: 'Nomor sudah terdaftar!' });
+        }
+
+        numbers.push(formattedNumber);
+
+        await fetch(listUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(numbers)
+        });
+
+        console.log(`✅ Nomor ${formattedNumber} berhasil ditambahkan.`);
+        return res.status(200).json({
+            status: 'success',
+            message: 'Nomor berhasil ditambahkan ke daftar akses.',
+            data: { nomor: formattedNumber, total: numbers.length }
+        });
+    } catch (error) {
+        console.error('Error Firebase:', error);
+        return res.status(500).json({ status: 'error', message: error.message });
+    }
 }
